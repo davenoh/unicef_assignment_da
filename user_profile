@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+# Setting your Stata command
+export STATA_CMD="/Applications/Stata/StataIC.app/Contents/MacOS/StataIC"
+
+echo "User profile setup completed."

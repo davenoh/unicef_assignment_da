@@ -1,0 +1,25 @@
+#!/bin/bash
+
+
+# Navigate to the directory where this script is located
+cd "$(dirname "$0")"
+
+# Load environment setup
+source ./user_profile
+
+# Run Stata master do-file in batch mode, log output to output folder
+echo "Analysis started."
+
+if ! command -v $STATA_CMD &> /dev/null; then
+    echo "Error: Stata command '$STATA_CMD' not found. Please check your user_profile."
+    exit 1
+fi
+
+if [ ! -f ./_scripts/master.do ]; then
+    echo "Error: './_scripts/master.do' file not found."
+    exit 1
+fi
+
+$STATA_CMD -b do ./_scripts/master.do
+
+echo "Analysis completed. Check the 'out' folder."

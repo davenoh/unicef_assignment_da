@@ -1,0 +1,265 @@
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
+> ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
+  log type:  text
+ opened on:  28 Jul 2025, 15:40:42
+
+. 
+.         global in       "./01_rawdata/"
+
+.         global data "./02_data_processed/"
+
+.         global out      "./03_out/"
+
+. 
+.         ssc install unique
+checking unique consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. ***********************************
+. * Import & Clean
+. ***********************************
+.         /*Population*/
+.                 import excel "${in}WPP2022_GEN_F01_DEMOGRAPHIC_INDICATORS_COMPACT_REV1.xlsx", clear cellrange(A17) firstrow case(lower) sheet(Project
+> ions)
+
+.                         * Keeping the country level data only
+.                                 keep if type=="Country/Area"
+(3,875 observations deleted)
+
+.                         * Use projected births for 2022 as weights
+.                                 keep if year==2022
+(18,486 observations deleted)
+
+.                         * Keeping the variables of interest
+.                                 keep regionsubregioncountryorar iso3alphacode year birthsthousands 
+
+.                         * Format: destring
+.                                 g weight=real(birthsthousands)
+(1 missing value generated)
+
+.                                 lab var weight  "Weight: Number of births (thousands) projected for 2022"
+
+.                                 drop birthsthousands
+
+.                         * Rename for consistency
+.                                 rename (regionsubregioncountryorar iso3alphacode) (country iso3code)
+
+.                         * Cleaning countery name for merge
+.                                 replace country="United States" if country=="United States of America"
+(1 real change made)
+
+.                                 replace country="Kosovo (UNSCR 1244)" if country=="Kosovo (under UNSC res. 1244)"
+(1 real change made)
+
+.                 save "${data}country_population.dta", replace 
+file ./02_data_processed/country_population.dta saved
+
+.                 
+.         /*U5 mortality targets status*/
+.                 import excel "${in}On-track and off-track countries.xlsx", clear firstrow case(lower)
+
+. 
+.                         * Generating dummy for on-track
+.                                 ta statusu5mr, m
+
+        Status.U5MR |      Freq.     Percent        Cum.
+--------------------+-----------------------------------
+Acceleration Needed |         59       29.50       29.50
+           Achieved |        134       67.00       96.50
+           On Track |          7        3.50      100.00
+--------------------+-----------------------------------
+              Total |        200      100.00
+
+.                                 g ontrack=cond(missing(statusu5mr),.,cond(statusu5mr=="Achieved" | statusu5mr=="On Track",1,0,.))
+
+.                                         lab define ontrack 0 "Off-track" 1 "On-track"
+
+.                                         lab value ontrack ontrack
+
+.                                         lab var ontrack "1 if ehtier achieved or on-track or 0 if off-track"
+
+.                                         drop statusu5mr
+
+.                         * Rename for consistency
+.                                 rename officialname country
+
+.                 save "${data}country_u5mr_status.dta", replace 
+file ./02_data_processed/country_u5mr_status.dta saved
+
+. 
+.         /*Key indicators by country ('18-'22)*/
+.                 import excel "${in}MNCH_2018-2022.xlsx", clear firstrow case(lower)
+
+.                         * Leading relevant data
+.                                 keep if  wealthquintile=="Total" & residence=="Total" & currentage=="15 to 49 years old"
+(6,576 observations deleted)
+
+.                         * misc
+.                                 destring obs_value time_period, replace
+obs_value: all characters numeric; replaced as double
+time_period: all characters numeric; replaced as int
+
+.                                 replace indicator="ANC4" if indicator=="Antenatal care 4+ visits - percentage of women (aged 15-49 years) attended at
+>  least four times during pregnancy by any provider"
+(512 real changes made)
+
+.                                 replace indicator="SBA" if indicator=="Skilled birth attendant - percentage of deliveries attended by skilled health 
+> personnel"
+(812 real changes made)
+
+.                                 format indicator %4s
+
+.                         * keeping the most recent ANC4 and SBA data
+.                                 *br geographicarea indicator time_period obs_value
+.                                 g sort_order = -time_period
+
+.                                 gsort geographicarea indicator sort_order
+
+.                                 bysort geographicarea indicator (sort_order): keep if _n == 1
+(952 observations deleted)
+
+.                         
+.                         * Rename for consistency
+.                                 rename geographicarea country
+
+.                         * Keeping the variables of interest
+.                                 keep country indicator obs_value
+
+.                 save "${data}country_anc4sba.dta", replace 
+file ./02_data_processed/country_anc4sba.dta saved
+
+.         
+. ***********************************
+. * Merge datasets
+. ***********************************
+. use  "${data}country_anc4sba.dta",clear
+
+.         * Merging with U5 mortality target status datset
+.                 merge m:1 country using  "${data}country_u5mr_status.dta", keep(match) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                               236  
+    -----------------------------------------
+
+.                         // Drop unmatched because we need both information for estimation
+.         * Merging with U5 mortality target status datset
+.                 merge m:1  country using "${data}country_population.dta", keep(match) nogen
+(note: variable country was str55, now str59 to accommodate using data's values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                               236  
+    -----------------------------------------
+
+.                         // Drop unmatched because we need both information for estimation
+. save  "${data}country_merged.dta", replace
+file ./02_data_processed/country_merged.dta saved
+
+.                         
+. ***********************************
+. * Analysis & Visualization
+. ***********************************
+. use  "${data}country_merged.dta",clear
+
+.                 
+.         * Create separate datasets for ANC4 and SBA
+.                 foreach INDICATOR in ANC4 SBA {
+  2.                         preserve
+  3.                         keep if indicator == "`INDICATOR'"
+  4.                         g w_`INDICATOR' = (obs_value/100) *weight
+  5.                         collapse (sum) w_`INDICATOR' weight, by(ontrack)
+  6.                         g pw_`INDICATOR' = (w_`INDICATOR' / weight)*100
+  7.                         tempfile temp_`INDICATOR'
+  8.                         save `temp_`INDICATOR''
+  9.                         restore
+ 10.                 }
+(149 observations deleted)
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_40172.000002 saved
+(87 observations deleted)
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_40172.000004 saved
+
+.                         
+.         * Merge both results
+.                 use `temp_ANC4', clear
+
+.                 g indicator="ANC4"
+
+.                 g pw_coverage=pw_ANC4
+
+.                 
+. 
+.                 append using `temp_SBA'
+(label ontrack already defined)
+
+.                 replace indicator="SBA"         if indicator==""
+(2 real changes made)
+
+.                 replace pw_coverage=pw_SBA      if pw_coverage==.
+(2 real changes made)
+
+.                 
+.                 keep ontrack indicator pw_coverage
+
+.                 
+.         * Visualization
+.                 set graphic off
+
+.                 foreach INDICATOR in ANC4 SBA {
+  2.                         g cov_`INDICATOR'_offtrack =pw_coverage         if ontrack == 0 & indicator=="`INDICATOR'"
+  3.                         g cov_`INDICATOR'_ontrack  =pw_coverage         if ontrack == 1 & indicator=="`INDICATOR'"
+  4.                         
+.                         gr  bar cov_`INDICATOR'_offtrack cov_`INDICATOR'_ontrack, ///
+>                                 bar(1,color(black%20)) ///
+>                                 bar(2, color(midblue%70)) ///
+>                                 ytitle("Population-weighted coverage (%)") ///
+>                                 ylabel(0(10)100, angle(0)) ///
+>                                 title("`INDICATOR' Coverage (%)") ///
+>                                 blabel(bar, format(%9.1f)) ///
+>                                 legend(order(1 "Off-track" 2 "On-track")) ///
+>                                 scheme(s1color) ///
+>                                 name(`INDICATOR', replace)      
+  5.                 }
+(3 missing values generated)
+(3 missing values generated)
+(3 missing values generated)
+(3 missing values generated)
+
+.                 gr combine              ANC4 SBA, scheme(s1color) row(1) col(2) ysize(3)
+
+.                 gr export               "${out}fig_comparison_anc4_sba.png", replace
+(file ./03_out/fig_comparison_anc4_sba.png written in PNG format)
+
+. 
+end of do-file
+
+. ***********************************
+. * Exporting a report (html)
+. ***********************************
+.         dyndoc "./_scripts/02_report.stmd", saving("./04_document/report.html") replace
+% My Report Title
+% `c(current_date)'
+
+This report presents a summary of the analysis.
+
+The graph below shows the relationship between variables of interest.
+
+![](03_out/fig_comparison_anc4_sba.png)
+
+
+
+successfully converted "/Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/
+> UNICEF/Written Assessment/unicef_assessment_submitted/Consultancy-Assessment/04_document/report.html"
+
+. 
+. log off
+      name:  <unnamed>
+       log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
+> ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
+  log type:  text
+ paused on:  28 Jul 2025, 15:40:58
+-------------------------------------------------------------------------------------------------------------------------------------------------------
