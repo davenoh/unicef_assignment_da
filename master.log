@@ -3,7 +3,7 @@
        log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
 > ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
   log type:  text
- opened on:  28 Jul 2025, 15:40:42
+ opened on:  28 Jul 2025, 18:43:13
 
 . 
 .         global in       "./01_rawdata/"
@@ -122,10 +122,10 @@ time_period: all characters numeric; replaced as int
 
 .                         
 .                         * Rename for consistency
-.                                 rename geographicarea country
+.                                 rename geographicarea country 
 
 .                         * Keeping the variables of interest
-.                                 keep country indicator obs_value
+.                                 keep country indicator obs_value time_period
 
 .                 save "${data}country_anc4sba.dta", replace 
 file ./02_data_processed/country_anc4sba.dta saved
@@ -137,15 +137,61 @@ file ./02_data_processed/country_anc4sba.dta saved
 . use  "${data}country_anc4sba.dta",clear
 
 .         * Merging with U5 mortality target status datset
-.                 merge m:1 country using  "${data}country_u5mr_status.dta", keep(match) nogen
+.                 merge m:1 country using  "${data}country_u5mr_status.dta", keep(match using)
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                             0
-    matched                               236  
+    not matched                            47
+        from master                         0  (_merge==1)
+        from using                         47  (_merge==2)
+
+    matched                               236  (_merge==3)
     -----------------------------------------
 
 .                         // Drop unmatched because we need both information for estimation
+.                         // Checking whether on-track vs. off-track differ
+.                                  unique country if _merge==2 & ontrack==0
+Number of unique values of country is  13
+Number of records is  13
+
+.                                  unique country if _merge==2 & ontrack==1
+Number of unique values of country is  34
+Number of records is  34
+
+. 
+.                                  drop if _merge==2
+(47 observations deleted)
+
+.                                  drop _merge
+
+.                                  ta ontrack if indicator=="ANC4", su(time_period)
+
+1 if ehtier |
+achieved or |
+on-track or |
+       0 if |       Summary of TIME_PERIOD
+  off-track |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+  Off-track |   2019.9762   1.3702073          42
+   On-track |      2019.8   1.4709304          45
+------------+------------------------------------
+      Total |   2019.8851    1.417706          87
+
+.                                  ta ontrack if indicator=="SBA", su(time_period)
+
+1 if ehtier |
+achieved or |
+on-track or |
+       0 if |       Summary of TIME_PERIOD
+  off-track |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+  Off-track |   2020.0455    1.396916          44
+   On-track |   2020.7048   1.2397566         105
+------------+------------------------------------
+      Total |   2020.5101   1.3183602         149
+
+.                                          
+.                                          
 .         * Merging with U5 mortality target status datset
 .                 merge m:1  country using "${data}country_population.dta", keep(match) nogen
 (note: variable country was str55, now str59 to accommodate using data's values)
@@ -156,7 +202,35 @@ file ./02_data_processed/country_anc4sba.dta saved
     matched                               236  
     -----------------------------------------
 
-.                         // Drop unmatched because we need both information for estimation
+.                         // Dropped unmatched because we need both information for estimation
+.                         // Checking whether on-track vs. off-track differ
+.                                 ta ontrack if indicator=="ANC4", sum(weight)
+
+1 if ehtier |
+achieved or |
+on-track or | Summary of Weight: Number of births
+       0 if |   (thousands) projected for 2022
+  off-track |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+  Off-track |   1105.2887   1684.7604          42
+   On-track |   1202.5117    3735.971          45
+------------+------------------------------------
+      Total |   1155.5765   2914.8967          87
+
+.                                 ta ontrack if indicator=="SBA", sum(weight)
+
+1 if ehtier |
+achieved or |
+on-track or | Summary of Weight: Number of births
+       0 if |   (thousands) projected for 2022
+  off-track |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+  Off-track |   1056.0164   1656.4232          44
+   On-track |    598.5297   2338.3111         105
+------------+------------------------------------
+      Total |   733.62644    2164.066         149
+
+.                         
 . save  "${data}country_merged.dta", replace
 file ./02_data_processed/country_merged.dta saved
 
@@ -179,9 +253,9 @@ file ./02_data_processed/country_merged.dta saved
   9.                         restore
  10.                 }
 (149 observations deleted)
-file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_40172.000002 saved
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_45055.000002 saved
 (87 observations deleted)
-file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_40172.000004 saved
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_45055.000004 saved
 
 .                         
 .         * Merge both results
@@ -231,7 +305,7 @@ file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_40172.000004 saved
 
 .                 gr combine              ANC4 SBA, scheme(s1color) row(1) col(2) ysize(3)
 
-.                 gr export               "${out}fig_comparison_anc4_sba.png", replace
+.                 gr export               "${out}fig_comparison_anc4_sba.png", width(1200) height(600) replace
 (file ./03_out/fig_comparison_anc4_sba.png written in PNG format)
 
 . 
@@ -241,17 +315,17 @@ end of do-file
 . * Exporting a report (html)
 . ***********************************
 .         dyndoc "./_scripts/02_report.stmd", saving("./04_document/report.html") replace
-% My Report Title
-% `c(current_date)'
+% Positions Applied
 
-This report presents a summary of the analysis.
+   Req. #581598, 581656, 581696, and 581699
+ 
+ 
+% Key Findings
 
-The graph below shows the relationship between variables of interest.
-
-![](03_out/fig_comparison_anc4_sba.png)
+   This analysis includes 153 countries with available data on antenatal care (ANC4) or skilled birth attendance (SBA) between 2018 and 2022. Among them, 87 countries were included in the ANC4 estimation (45 on track and 42 off track), and 149 countries in the SBA estimation (105 on track and 44 off track). Results indicate that countries on track to meet under-five mortality targets consistently report higher coverage of maternal health services: antenatal care coverage is approximately 17.5 percentage points higher among on-track countries, where coverage reaches around 72.5%, compared to 55% in off-track countries. Similarly, SBA coverage is markedly higher in on-track countries (92.5%) than in off-track ones (68.7%). However, several caveats must be noted. The availability of data differs between groups—data on ANC4 is disproportionately missing among on-track countries (missing in 62 of 107 countries with some data), which could bias group comparisons. Moreover, the population-weighted estimates are sensitive to the distribution of projected births: off-track countries in the SBA sample account for over 1 million projected births in 2022, nearly double that of on-track countries, giving them disproportionate influence in weighted averages. Finally, the findings reflect associations rather than causal relationships. Differences in health service coverage may correlate with under-five mortality outcomes, but unobserved confounding factors and group selection limit causal interpretation.
 
 
-
+![](../03_out/fig_comparison_anc4_sba.png)
 successfully converted "/Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/
 > UNICEF/Written Assessment/unicef_assessment_submitted/Consultancy-Assessment/04_document/report.html"
 
@@ -261,5 +335,5 @@ successfully converted "/Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@g
        log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
 > ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
   log type:  text
- paused on:  28 Jul 2025, 15:40:58
+ paused on:  28 Jul 2025, 18:43:29
 -------------------------------------------------------------------------------------------------------------------------------------------------------

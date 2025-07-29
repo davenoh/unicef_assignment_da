@@ -25,9 +25,15 @@ if not os.path.exists(master_do_path):
 # 4. Create user_profile
 user_profile_content = """#!/bin/bash
 
+# ==== STATA COMMAND ====
+# # Set your Stata command here (adjust for your version and install location)
+STATA_CMD="/Applications/Stata/StataIC.app/Contents/MacOS/StataIC"
+export STATA_CMD
 
-# Setting your Stata command
-export STATA_CMD="/Applications/Stata/StataIC.app/Contents/MacOS/StataIC"
+# ==== PROJECT PATH ====
+# Absolute path to the root of the project folder
+PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export PROJECT_DIR
 
 echo "User profile setup completed."
 """
@@ -61,9 +67,9 @@ if [ ! -f ./_scripts/master.do ]; then
     exit 1
 fi
 
-$STATA_CMD -b do ./_scripts/master.do
+$STATA_CMD -b do _scripts/master.do PROJECT_DIR "$PROJECT_DIR"
 
-echo "Analysis completed. Check the 'out' folder."
+echo "Analysis completed. Check the '03_out' folder."
 """
 
 with open("run_project", "w") as f:

@@ -8,8 +8,6 @@
 	mat drop _all
 	program drop _all
 
-
-	*cd 	"/Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Written Assessment/unicef_assessment_submitted/Consultancy-Assessment"
 	log using "./master.log", replace
 
 	global in 	"./01_rawdata/"
@@ -69,9 +67,9 @@
 				bysort geographicarea indicator (sort_order): keep if _n == 1
 			
 			* Rename for consistency
-				rename geographicarea country
+				rename geographicarea country 
 			* Keeping the variables of interest
-				keep country indicator obs_value
+				keep country indicator obs_value time_period
 		save "${data}country_anc4sba.dta", replace 
 	
 ***********************************
@@ -79,11 +77,25 @@
 ***********************************
 use  "${data}country_anc4sba.dta",clear
 	* Merging with U5 mortality target status datset
-		merge m:1 country using  "${data}country_u5mr_status.dta", keep(match) nogen
+		merge m:1 country using  "${data}country_u5mr_status.dta", keep(match using)
 			// Drop unmatched because we need both information for estimation
+			// Checking whether on-track vs. off-track differ
+				 unique country if _merge==2 & ontrack==0
+				 unique country if _merge==2 & ontrack==1
+
+				 drop if _merge==2
+				 drop _merge
+				 ta ontrack if indicator=="ANC4", su(time_period)
+				 ta ontrack if indicator=="SBA", su(time_period)
+					 
+					 
 	* Merging with U5 mortality target status datset
 		merge m:1  country using "${data}country_population.dta", keep(match) nogen
-			// Drop unmatched because we need both information for estimation
+			// Dropped unmatched because we need both information for estimation
+			// Checking whether on-track vs. off-track differ
+				ta ontrack if indicator=="ANC4", sum(weight)
+				ta ontrack if indicator=="SBA", sum(weight)
+			
 save  "${data}country_merged.dta", replace
 			
 ***********************************
@@ -133,4 +145,4 @@ use  "${data}country_merged.dta",clear
 				name(`INDICATOR', replace)	
 		}
 		gr combine 		ANC4 SBA, scheme(s1color) row(1) col(2) ysize(3)
-		gr export 		"${out}fig_comparison_anc4_sba.png", replace
+		gr export 		"${out}fig_comparison_anc4_sba.png", width(1200) height(600) replace

@@ -20,6 +20,6 @@ if [ ! -f ./_scripts/master.do ]; then
     exit 1
 fi
 
-$STATA_CMD -b do ./_scripts/master.do
+$STATA_CMD -b do _scripts/master.do PROJECT_DIR "$PROJECT_DIR"
 
-echo "Analysis completed. Check the 'out' folder."
+echo "Analysis completed. Check the '03_out' folder."
