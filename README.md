@@ -1,6 +1,6 @@
 # UNICEF Consultancy Assessment
 
-## 📋 Position the Candidiate Applied
+## 📋 Position the Candidate Applied for
 - Learning and Skills Data Analyst Consultant – Req. #581598
 - Household Survey Data Analyst Consultant – Req. #581656
 - Administrative Data Analyst – Req. #581696
