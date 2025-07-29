@@ -3,7 +3,7 @@
        log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
 > ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
   log type:  text
- opened on:  28 Jul 2025, 21:16:45
+ opened on:  28 Jul 2025, 21:50:51
 
 . 
 .         global in       "./01_rawdata/"
@@ -253,9 +253,9 @@ file ./02_data_processed/country_merged.dta saved
   9.                         restore
  10.                 }
 (149 observations deleted)
-file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_48395.000002 saved
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_49057.000002 saved
 (87 observations deleted)
-file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_48395.000004 saved
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_49057.000004 saved
 
 .                         
 .         * Merge both results
@@ -327,7 +327,7 @@ end of do-file
  
 % Key Findings
 
-   This analysis includes 153 countries with available data on antenatal care (ANC4) or skilled birth attendance (SBA) between 2018 and 2022. Among them, 87 countries were included in the ANC4 estimation (45 on track and 42 off track), and 149 countries in the SBA estimation (105 on track and 44 off track). Results indicate that countries on track to meet under-five mortality targets consistently report higher coverage of maternal health services: antenatal care coverage is approximately 17.5 percentage points higher among on-track countries, where coverage reaches around 72.5%, compared to 55% in off-track countries. Similarly, SBA coverage is markedly higher in on-track countries (92.5%) than in off-track ones (68.7%). However, several caveats must be noted. The availability of data differs between groups—data on ANC4 is disproportionately missing among on-track countries (missing in 62 of 107 countries with some data), which could bias group comparisons. Moreover, the population-weighted estimates are sensitive to the distribution of projected births: off-track countries in the SBA sample account for over 1 million projected births in 2022, nearly double that of on-track countries, giving them disproportionate influence in weighted averages. Finally, the findings reflect associations rather than causal relationships. Differences in health service coverage may correlate with under-five mortality outcomes, but unobserved confounding factors and group selection limit causal interpretation.
+   This analysis includes 153 countries with available data on antenatal care (ANC4) or skilled birth attendance (SBA) between 2018 and 2022. Among them, 87 countries were included in the ANC4 estimation (45 on-track and 42 off-track), and 149 countries in the SBA estimation (105 on-track and 44 off-track). Results indicate that countries on-track to meet under-five mortality targets consistently report higher coverage of maternal health services: antenatal care coverage is approximately 17.5 percentage points higher among on-track countries, where coverage reaches around 72.8%, compared to 55.3% in off-track countries. Similarly, SBA coverage is markedly higher in on-track countries (92.5%) than in off-track ones (68.7%). However, several caveats must be noted. The availability of data differs between groups—data on ANC4 is disproportionately missing among on-track countries (missing in 62 of 107 countries for which either ANC4 or SBA data is available), which could bias group comparisons. Moreover, the population-weighted estimates are sensitive to the distribution of projected births: off-track countries in the SBA sample account for over 1 million projected births in 2022, nearly double that of on-track countries, giving them disproportionate influence in weighted averages. Finally, the findings reflect associations rather than causal relationships. Differences in health service coverage may correlate with under-five mortality outcomes, but unobserved confounding factors and group selection limit causal interpretation.
 
 
 ![](../03_out/fig_comparison_anc4_sba.png)
@@ -340,5 +340,5 @@ successfully converted "/Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@g
        log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
 > ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
   log type:  text
- paused on:  28 Jul 2025, 21:17:01
+ paused on:  28 Jul 2025, 21:51:07
 -------------------------------------------------------------------------------------------------------------------------------------------------------
