@@ -8,6 +8,11 @@ This repository contains all scripts, raw data, and documents necessary to repro
 ------------------------------------------------------------------------
 
 ## 📁 Repository Structure
+
+
+<pre lang="markdown"> ``` project/ │ ├── _scripts/ # All Stata do-files and reporting scripts │ ├── 01_cleaning_export.do │ ├── 02_analysis.do │ ├── 02_report.stmd │ └── run_project # Bash script to execute the full pipeline │ ├── 01_raw/ # Raw data (not to be modified) │ ├── 02_data/ # Cleaned datasets and intermediate files │ ├── 03_out/ # Output files (figures, tables, results) │ └── fig_comparison_anc4_sba.png │ ├── 04_document/ # Final reports and HTML output │ └── report.html │ ├── user_profile # Sets environment variables like $PROJECT_DIR │ └── README.md # This file ``` </pre>
+
+<pre lang="markdown"> ```
 unicef_assignment_da/
 │
 ├── _scripts/ # All Stata, stmd, and Python scripts
@@ -32,7 +37,7 @@ unicef_assignment_da/
 │
 └── README.md # This file
 
-
+``` </pre>
 ------------------------------------------------------------------------
 
 ## 📝 Description of Key Files and Folders
