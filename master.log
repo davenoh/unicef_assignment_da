@@ -3,7 +3,7 @@
        log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
 > ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
   log type:  text
- opened on:  28 Jul 2025, 18:43:13
+ opened on:  28 Jul 2025, 21:16:45
 
 . 
 .         global in       "./01_rawdata/"
@@ -253,9 +253,9 @@ file ./02_data_processed/country_merged.dta saved
   9.                         restore
  10.                 }
 (149 observations deleted)
-file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_45055.000002 saved
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_48395.000002 saved
 (87 observations deleted)
-file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_45055.000004 saved
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_48395.000004 saved
 
 .                         
 .         * Merge both results
@@ -317,8 +317,13 @@ end of do-file
 .         dyndoc "./_scripts/02_report.stmd", saving("./04_document/report.html") replace
 % Positions Applied
 
-   Req. #581598, 581656, 581696, and 581699
- 
+* Learning and Skills Data Analyst Consultant – Req. #581598
+
+* Household Survey Data Analyst Consultant – Req. #581656
+
+* Administrative Data Analyst – Req. #581696
+
+* Microdata Harmonization Consultant – Req. #581699 
  
 % Key Findings
 
@@ -335,5 +340,5 @@ successfully converted "/Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@g
        log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
 > ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
   log type:  text
- paused on:  28 Jul 2025, 18:43:29
+ paused on:  28 Jul 2025, 21:17:01
 -------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,13 +1,8 @@
 #!/bin/bash
 
 # ==== STATA COMMAND ====
-# # Set your Stata command here (adjust for your version and install location)
+# # Set your Stata command here (adjust for your model and install location)
 STATA_CMD="/Applications/Stata/StataIC.app/Contents/MacOS/StataIC"
 export STATA_CMD
-
-# ==== PROJECT PATH ====
-# Absolute path to the root of the project folder
-PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export PROJECT_DIR
 
 echo "User profile setup completed."
