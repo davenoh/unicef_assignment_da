@@ -1,13 +1,13 @@
 # UNICEF Consultancy Assessment
 
-## Position the Candidiate Applied
+## 📋 Position the Candidiate Applied
 - Learning and Skills Data Analyst Consultant – Req. #581598
 - Household Survey Data Analyst Consultant – Req. #581656
 - Administrative Data Analyst – Req. #581696
 - Microdata Harmonization Consultant – Req. #581699
  
-## Overview
-This repository contains all scripts, raw data, and documents necessary to reproduce the analysis for estimating the population-weighted coverage **Antenatal care (ANC4)** and **Skilled birth attendance (SBA)**. 
+## 🗂️ Overview
+This repository contains all scripts, raw data, and documents necessary to reproduce the analysis for estimating the population-weighted coverage of **Antenatal care (ANC4)** and **Skilled birth attendance (SBA)**. 
 
 ------------------------------------------------------------------------
 
@@ -36,24 +36,22 @@ unicef_assignment_da/
 
 - `01_raw/`: Stores the original raw data files.
     * `MNCH_2018-2022.xlsx`: Downloaded two key health service indicator (ANC4 and SBA) from the UNICEF Global Data Repository [`LINK`](https://data.unicef.org/resources/data_explorer/unicef_f/?ag=UNICEF&df=GLOBAL_DATAFLOW&ver=1.0&dq=.MNCH_ANC4+MNCH_SAB.&startPeriod=2018&endPeriod=2022) at the country level for the years **2018–2022**.
-    * `On-track and off-track countries.xlsx`: Provided by UNICEF D&A Education Team
-    * `WPP2022_GEN_F01_DEMOGRAPHIC_INDICATORS_COMPACT_REV1.xlsx`: Provided by UNICEF D&A Education Team
+    * `On-track and off-track countries.xlsx`: Under-five mortality classification provided by UNICEF D&A Education Team
+    * `WPP2022_GEN_F01_DEMOGRAPHIC_INDICATORS_COMPACT_REV1.xlsx`: Population data provided by UNICEF D&A Education Team
 - `02_data_processed/`: Contains cleaned and merged datasets used for analysis.
     * `country_anc4sba.dta`: A cleaned dataset created from **MNCH_2018-2022.xlsx**, containing antenatal care (ANC4) and skilled birth attendance (SBA) indicators.
     * `country_population.dta`: A cleaned dataset derived from **WPP2022_GEN_F01_DEMOGRAPHIC_INDICATORS_COMPACT_REV1.xlsx**, containing country-level population statistics.
     * `country_u5mr_status.dta`: A cleaned dataset based on **On-track and off-track countries.xlsx**, indicating under-5 mortality rate (U5MR) target status.
     * `country_merged.dta`: A merged dataset combining `country_anc4sba.dta`, `country_population.dta`, and `country_u5mr_status.dta` for analysis.
 - `03_out/`: Contains a visualization comparing coverage for on-track vs. off-track countries
-- `04_document/`: Contains final HTML report.
+- `04_document/`: Contains the final HTML report.
 - `master_log`: A Stata log file that records all console output from running `master.do`, useful for debugging and verifying execution.
-- `user_profile`: A configuration file or script that stores machine-independent settings, enabling reproducible execution across different systems.
+- `user_profile`: A configuration file that stores machine-independent settings, enabling reproducible execution across different systems.
 - `run_project`: A script that executes the entire workflow end-to-end, from data processing to HTML report generation.
 
 ---
 
 ## ▶️ How to Reproduce the Analysis
-
-## How to Reproduce the Analysis
 
 To reproduce the analysis, follow the steps below:
 
@@ -70,7 +68,7 @@ To reproduce the analysis, follow the steps below:
    Once the `user_profile` is correctly configured, you can reproduce the full workflow by:
 
    - Simply **double-click** the `run_project` script
-   - Or execute the `run_project` script via the terminal:
+   - Or, execute the `run_project` script via the terminal:
 
      ```bash
      bash run_project
