@@ -3,7 +3,7 @@
        log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
 > ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
   log type:  text
- opened on:  28 Jul 2025, 22:07:07
+ opened on:  28 Jul 2025, 22:09:49
 
 . 
 .         global in       "./01_rawdata/"
@@ -253,9 +253,9 @@ file ./02_data_processed/country_merged.dta saved
   9.                         restore
  10.                 }
 (149 observations deleted)
-file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_49449.000002 saved
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_49560.000002 saved
 (87 observations deleted)
-file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_49449.000004 saved
+file /var/folders/xr/z14k3k1j4s17jb4njqntpll00000gn/T//S_49560.000004 saved
 
 .                         
 .         * Merge both results
@@ -318,11 +318,8 @@ end of do-file
 % Positions Applied
 
 - Learning and Skills Data Analyst Consultant – Req. #581598
-
 - Household Survey Data Analyst Consultant – Req. #581656
-
 - Administrative Data Analyst – Req. #581696
-
 - Microdata Harmonization Consultant – Req. #581699 
  
 % Key Findings
@@ -340,5 +337,5 @@ successfully converted "/Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@g
        log:  /Users/dnoh/Library/CloudStorage/GoogleDrive-dnohkim00@gmail.com/My Drive/Work/_Job Application/3_Job Market 2025/3_Interviews/UNICEF/Writ
 > ten Assessment/unicef_assessment_submitted/Consultancy-Assessment/master.log
   log type:  text
- paused on:  28 Jul 2025, 22:07:23
+ paused on:  28 Jul 2025, 22:10:05
 -------------------------------------------------------------------------------------------------------------------------------------------------------
